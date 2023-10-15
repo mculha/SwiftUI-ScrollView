@@ -8,14 +8,35 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    let colors: [Color] = [.red, .orange, .yellow, .green, .cyan, .blue, .purple]
+    private let cellHorizontalSpace: CGFloat = 150
+    
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        GeometryReader { proxy in
+            
+            ScrollView(.horizontal) {
+                LazyHStack {
+                    ForEach(colors, id: \.self) { color in
+                        RoundedRectangle(cornerRadius: 25)
+                            .fill(color.gradient)
+                            .frame(width: (proxy.size.width - cellHorizontalSpace) , height: 200)
+                            .scrollTransition(topLeading: .interactive,
+                                              bottomTrailing: .interactive,
+                                              axis: .horizontal) { view, phase in
+                                view
+                                    .opacity(1 - (phase.value < 0 ? -phase.value / 2 : phase.value / 2))
+                                    .scaleEffect(1 - (phase.value < 0 ? -phase.value / 5 : phase.value / 5))
+                            }
+                    }
+                }
+                .padding(.horizontal, cellHorizontalSpace / 2)
+                .scrollTargetLayout()
+            }
+            .scrollTargetBehavior(.viewAligned)
+            .padding(.horizontal, 0)
         }
-        .padding()
     }
 }
 
