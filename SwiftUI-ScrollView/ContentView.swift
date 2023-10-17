@@ -16,7 +16,7 @@ struct ContentView: View {
     var body: some View {
         GeometryReader { proxy in
             
-            ScrollView(.horizontal) {
+            ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack {
                     ForEach(colors, id: \.self) { color in
                         RoundedRectangle(cornerRadius: 25)
@@ -26,7 +26,7 @@ struct ContentView: View {
                                               bottomTrailing: .interactive,
                                               axis: .horizontal) { view, phase in
                                 view
-                                    .opacity(1 - (phase.value < 0 ? -phase.value / 2 : phase.value / 2))
+                                    .opacity(1 - (phase.value < 0 ? -phase.value : phase.value))
                                     .scaleEffect(1 - (phase.value < 0 ? -phase.value / 5 : phase.value / 5))
                             }
                     }
